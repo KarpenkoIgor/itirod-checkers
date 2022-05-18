@@ -101,4 +101,122 @@ input {
     margin-left: 5px;
 }
 
+@media only screen  and (hover: none){
+    header {
+        height: 90px;
+    }
+    
+
+    body {
+        font-size: 32px;
+    }
+
+    input {
+        font-size: 50px;
+        width:  300px;
+    }
+    
+    button {
+        border-radius: 10px;
+        color:white;
+        font-size: 50px;
+        font-weight: bold; 
+        border: 0;
+        padding: 4px 10px;
+    }
+    
+    .gray-button {
+        background-color: #4e4e4e;
+    }
+    
+    .blue-button {
+        background-color: #518cff;
+    }
+    
+    .black-button {
+        background-color: #1b1b1b;
+    }
+    
+
+    
+    .big-circle {
+        display: none;
+    }
+    
+    .middle-circle {
+        display: none;
+    }
+    
+    .little-circle {
+        display: none;
+    }
+
+}
+
+
+@media only screen  and (max-width: 560px){
+    header {
+        height: 90px;
+    }
+    
+    main{
+        margin-top: 100px;
+    }
+
+    body {
+        font-size: 32px;
+    }
+
+    input {
+        font-size: 32px;
+        width:  300px;
+    }
+    
+    button {
+        border-radius: 10px;
+        color:white;
+        font-size: 32px;
+        font-weight: bold; 
+        border: 0;
+        padding: 4px 10px;
+    }
+    
+    .gray-button {
+        background-color: #4e4e4e;
+    }
+    
+    .blue-button {
+        background-color: #518cff;
+    }
+    
+    .black-button {
+        background-color: #1b1b1b;
+    }
+        
+    .account-buttons {
+        display: none;
+        margin-top: 12px;
+        margin-right: 10px;
+    }
+    
+    .logo-text {
+        display: inline-block;
+        font-size: 64px;
+        margin-top: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .big-circle {
+        display: none;
+    }
+    
+    .middle-circle {
+        display: none;
+    }
+    
+    .little-circle {
+        display: none;
+    }
+
+}
 

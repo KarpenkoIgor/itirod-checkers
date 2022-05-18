@@ -31,3 +31,15 @@ h3 {
     width: 324px;
     align-self: center;
 }
+
+@media only screen  and (hover: none) {
+    .logo-text {
+        font-size: 64px;
+        margin-top: 12px;
+        margin-bottom: 8px;
+    }
+    .container {
+        margin-top: 300px;
+    }
+    
+}

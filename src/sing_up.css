@@ -26,3 +26,33 @@ h2 {
     align-self: center;
     width: 324px;
 }
+
+
+@media only screen  and (hover: none) {
+    .logo-text {
+        Position: relative;
+        font-size: 64px;
+        margin-top: 12px;
+        margin-bottom: 8px;
+    }
+    input {
+        font-size: 50px;
+    }
+    form {
+        position: absolute/relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .logo {
+        position: absolute/relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: center
+    }
+    .account-buttons {
+        display: none;
+    }
+}
