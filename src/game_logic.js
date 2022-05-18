@@ -35,7 +35,7 @@ var black = -1; // computer is black
 var red = 1; // visitor is red
 var square_dim = 80;
 var piece_toggled = false;
-var my_turn = false;
+var red_turn = false;
 var double_jump = false;
 var comp_move = false;
 var game_is_over = false;
@@ -126,19 +126,15 @@ document.write(
 );
 
 function clicked(i, j) {
-  if (my_turn) {
-    if (integ(board[i][j]) == 1) toggle(i, j);
-    else if (piece_toggled) move(selected, coord(i, j));
-    else
-      message(
-        "First click one of your red pieces, then click where you want to move it"
-      );
-  } else {
-    message("It's not your turn yet. Hang on a sec!");
-  }
+  if (integ((board[i][j]) >= 1 && red_turn)|| (integ(board[i][j]) <= -1 && !red_turn)) toggle(i, j);
+  else if (piece_toggled) move(selected, coord(i, j));
+  else
+    message(
+      "First click one of your red pieces, then click where you want to move it"
+    );  
 }
 function toggle(x, y) {
-  if (my_turn) {
+  if (red_turn) {
     if (piece_toggled)
       draw(
         selected.x,
@@ -148,7 +144,7 @@ function toggle(x, y) {
     if (piece_toggled && selected.x == x && selected.y == y) {
       piece_toggled = false;
       if (double_jump) {
-        my_turn = double_jump = false;
+        red_turn = double_jump = false;
         computer();
       }
     } else {
@@ -156,20 +152,25 @@ function toggle(x, y) {
       draw(x, y, "gif/you2" + (board[x][y] == 1.1 ? "k" : "") + ".gif");
     }
     selected = coord(x, y);
-  } else {
-    if (piece_toggled && integ(board[selected_c.x][selected_c.y]) == -1)
+  } 
+  else {
+    if (piece_toggled)
       draw(
-        selected_c.x,
-        selected_c.y,
-        "gif/me1" + (board[selected_c.x][selected_c.y] == -1.1 ? "k" : "") + ".gif"
+        selected.x,
+        selected.y,
+        "gif/me1" + (board[selected.x][selected.y] == -1.1 ? "k" : "") + ".gif"
       );
-    if (piece_toggled && selected_c.x == x && selected_c.y == y) {
+    if (piece_toggled && selected.x == x && selected.y == y) {
       piece_toggled = false;
+      if (double_jump) {
+        red_turn = double_jump = false;
+        computer();
+      }
     } else {
       piece_toggled = true;
       draw(x, y, "gif/me2" + (board[x][y] == -1.1 ? "k" : "") + ".gif");
     }
-    selected_c = coord(x, y);
+    selected = coord(x, y);
   }
 }
 function draw(x, y, name) {
@@ -227,17 +228,17 @@ function legal_move(from, to) {
   return true;
 }
 function move(from, to) {
-  my_turn = true;
+  //if (!red_turn) red_turn = true;
   if (legal_move(from, to)) {
     piece = board[from.x][from.y];
     distance = coord(to.x - from.x, to.y - from.y);
     if (abs(distance.x) == 1 && board[to.x][to.y] == 0) {
       swap(from, to);
-    } else if (
+    } 
+    else if (
       abs(distance.x) == 2 &&
       integ(piece) !=
-        integ(board[from.x + sign(distance.x)][from.y + sign(distance.y)])
-    ) {
+        integ(board[from.x + sign(distance.x)][from.y + sign(distance.y)])) {
       double_jump = false;
       swap(from, to);
       remove(from.x + sign(distance.x), from.y + sign(distance.y));
@@ -253,17 +254,32 @@ function move(from, to) {
         );
       }
     }
-    if (board[to.x][to.y] == 1 && to.y == 7) king_me(to.x, to.y);
+    if (board[to.x][to.y] == 1 && to.y == 7 && red_turn) king_me(to.x, to.y);
+    if (board[to.x][to.y] == -1 && to.y == 0 && !red_turn) king_me(to.x, to.y);
     selected = to;
-    if (game_over() && !double_jump) {
-      setTimeout(
-        "toggle(" +
-          to.x +
-          "," +
-          to.y +
-          ");my_turn = double_jump = false;computer();",
-        1000
-      );
+    if(red_turn){
+      if (game_over() && !double_jump) {
+        setTimeout(
+          "toggle(" +
+            to.x +
+            "," +
+            to.y +
+            ");red_turn = double_jump = false;",
+          100
+        );
+      }
+    }
+    else {
+      if (game_over() && !double_jump) {
+        setTimeout(
+          "toggle(" +
+            to.x +
+            "," +
+            to.y +
+            ");red_turn = true;double_jump = false;",
+          100
+        );
+      }
     }
   }
   return true;
@@ -279,46 +295,24 @@ function king_me(x, y) {
 }
 
 function swap(from, to) {
-  if (my_turn || comp_move) {
-    dummy_src = document.images["space" + to.x + "" + to.y].src;
-    document.images["space" + to.x + "" + to.y].src =
-      document.images["space" + from.x + "" + from.y].src;
-    document.images["space" + from.x + "" + from.y].src = dummy_src;
-  }
+  dummy_src = document.images["space" + to.x + "" + to.y].src;
+  document.images["space" + to.x + "" + to.y].src =
+    document.images["space" + from.x + "" + from.y].src;
+  document.images["space" + from.x + "" + from.y].src = dummy_src;
+
   dummy_num = board[from.x][from.y];
   board[from.x][from.y] = board[to.x][to.y];
   board[to.x][to.y] = dummy_num;
 }
 function remove(x, y) {
-  if (my_turn || comp_move) draw(x, y, "gif/gray.gif");
+  draw(x, y, "gif/gray.gif");
   board[x][y] = 0;
 }
 function Result(val) {
   this.high = val;
   this.dir = new Array();
 }
-function move_comp(from, to) {
-  toggle(from.x, from.y);
-  comp_move = true;
-  swap(from, to);
-  if (abs(from.x - to.x) == 2) {
-    remove(from.x + sign(to.x - from.x), from.y + sign(to.y - from.y));
-  }
-  if (board[to.x][to.y] == -1 && to.y == 0) king_me(to.x, to.y);
-  setTimeout(
-    "selected_c = coord(" + to.x + "," + to.y + ");piece_toggled = true;",
-    900
-  );
-  setTimeout(
-    "bak=my_turn;my_turn=false;toggle(" + to.x + "," + to.y + ");my_turn=bak;",
-    1000
-  );
-  if (game_over()) {
-    setTimeout("comp_move = false;my_turn = true;togglers=0;", 600);
-    message("Ok. It's your turn. You may make your move.");
-  }
-  return true;
-}
+
 function game_over() {
   // make sure game is not over (return false if game is over)
   comp = you = false;
@@ -334,188 +328,5 @@ function game_over() {
   return !game_is_over;
 }
 
-// the higher the jump_priority, the more often the computer will take the jump over the safe move
-var jump_priority = 10;
-
-function computer() {
-  // step one - prevent any jumps
-  for (var j = 0; j < 8; j++) {
-    for (var i = 0; i < 8; i++) {
-      if (integ(board[i][j]) == 1) {
-        if (
-          legal_move(coord(i, j), coord(i + 2, j + 2)) &&
-          prevent(coord(i + 2, j + 2), coord(i + 1, j + 1))
-        ) {
-          return true;
-        }
-        if (
-          legal_move(coord(i, j), coord(i - 2, j + 2)) &&
-          prevent(coord(i - 2, j + 2), coord(i - 1, j + 1))
-        ) {
-          return true;
-        }
-      }
-      if (board[i][j] == 1.1) {
-        if (
-          legal_move(coord(i, j), coord(i - 2, j - 2)) &&
-          prevent(coord(i - 2, j - 2), coord(i - 1, j - 1))
-        ) {
-          return true;
-        }
-        if (
-          legal_move(coord(i, j), coord(i + 2, j - 2)) &&
-          prevent(coord(i + 2, j - 2), coord(i + 1, j - 1))
-        ) {
-          return true;
-        }
-      }
-    }
-  }
-  // step two - if step one not taken, look for jumps
-  for (var j = 7; j >= 0; j--) {
-    for (var i = 0; i < 8; i++) {
-      if (jump(i, j)) return true;
-    }
-  }
-  safe_from = null;
-  // step three - if step two not taken, look for safe single space moves
-  for (var j = 0; j < 8; j++) {
-    for (var i = 0; i < 8; i++) {
-      if (single(i, j)) return true;
-    }
-  }
-  // if no safe moves, just take whatever you can get
-  if (safe_from != null) {
-    move_comp(safe_from, safe_to);
-  } else {
-    message("You beat me!!");
-    game_is_over = true;
-  }
-  safe_from = safe_to = null;
-  return false;
-}
-function jump(i, j) {
-  if (board[i][j] == -1.1) {
-    if (legal_move(coord(i, j), coord(i + 2, j + 2))) {
-      move_comp(coord(i, j), coord(i + 2, j + 2));
-      setTimeout("jump(" + (i + 2) + "," + (j + 2) + ");", 500);
-      return true;
-    }
-    if (legal_move(coord(i, j), coord(i - 2, j + 2))) {
-      move_comp(coord(i, j), coord(i - 2, j + 2));
-      setTimeout("jump(" + (i - 2) + "," + (j + 2) + ");", 500);
-      return true;
-    }
-  }
-  if (integ(board[i][j]) == -1) {
-    if (legal_move(coord(i, j), coord(i - 2, j - 2))) {
-      move_comp(coord(i, j), coord(i - 2, j - 2));
-      setTimeout("jump(" + (i - 2) + "," + (j - 2) + ");", 500);
-      return true;
-    }
-    if (legal_move(coord(i, j), coord(i + 2, j - 2))) {
-      move_comp(coord(i, j), coord(i + 2, j - 2));
-      setTimeout("jump(" + (i + 2) + "," + (j - 2) + ");", 500);
-      return true;
-    }
-  }
-  return false;
-}
-function single(i, j) {
-  if (board[i][j] == -1.1) {
-    if (legal_move(coord(i, j), coord(i + 1, j + 1))) {
-      safe_from = coord(i, j);
-      safe_to = coord(i + 1, j + 1);
-      if (wise(coord(i, j), coord(i + 1, j + 1))) {
-        move_comp(coord(i, j), coord(i + 1, j + 1));
-        return true;
-      }
-    }
-    if (legal_move(coord(i, j), coord(i - 1, j + 1))) {
-      safe_from = coord(i, j);
-      safe_to = coord(i - 1, j + 1);
-      if (wise(coord(i, j), coord(i - 1, j + 1))) {
-        move_comp(coord(i, j), coord(i - 1, j + 1));
-        return true;
-      }
-    }
-  }
-  if (integ(board[i][j]) == -1) {
-    if (legal_move(coord(i, j), coord(i + 1, j - 1))) {
-      safe_from = coord(i, j);
-      safe_to = coord(i + 1, j - 1);
-      if (wise(coord(i, j), coord(i + 1, j - 1))) {
-        move_comp(coord(i, j), coord(i + 1, j - 1));
-        return true;
-      }
-    }
-    if (legal_move(coord(i, j), coord(i - 1, j - 1))) {
-      safe_from = coord(i, j);
-      safe_to = coord(i - 1, j - 1);
-      if (wise(coord(i, j), coord(i - 1, j - 1))) {
-        move_comp(coord(i, j), coord(i - 1, j - 1));
-        return true;
-      }
-    }
-  }
-  return false;
-}
-function possibilities(x, y) {
-  if (!jump(x, y))
-    if (!single(x, y)) return true;
-    else return false;
-  else return false;
-}
-function prevent(end, s) {
-  i = end.x;
-  j = end.y;
-  if (!possibilities(s.x, s.y)) return true;
-  else if (
-    integ(board[i - 1][j + 1]) == -1 &&
-    legal_move(coord(i - 1, j + 1), coord(i, j))
-  ) {
-    return move_comp(coord(i - 1, j + 1), coord(i, j));
-  } else if (
-    integ(board[i + 1][j + 1]) == -1 &&
-    legal_move(coord(i + 1, j + 1), coord(i, j))
-  ) {
-    return move_comp(coord(i + 1, j + 1), coord(i, j));
-  } else if (
-    board[i - 1][j - 1] == -1.1 &&
-    legal_move(coord(i - 1, j - 1), coord(i, j))
-  ) {
-    return move_comp(coord(i - 1, j - 1), coord(i, j));
-  } else if (
-    board[i + 1][j - 1] == -1.1 &&
-    legal_move(coord(i + 1, j - 1), coord(i, j))
-  ) {
-    return move_comp(coord(i + 1, j - 1), coord(i, j));
-  } else {
-    return false;
-  }
-}
-function wise(from, to) {
-  i = to.x;
-  j = to.y;
-  n = j > 0;
-  s = j < 7;
-  e = i < 7;
-  w = i > 0;
-  if (n && e) ne = board[i + 1][j - 1];
-  else ne = null;
-  if (n && w) nw = board[i - 1][j - 1];
-  else nw = null;
-  if (s && e) se = board[i + 1][j + 1];
-  else se = null;
-  if (s && w) sw = board[i - 1][j + 1];
-  else sw = null;
-  eval((j - from.y != 1 ? "s" : "n") + (i - from.x != 1 ? "e" : "w") + "=0;");
-  if (sw == 0 && integ(ne) == 1) return false;
-  if (se == 0 && integ(nw) == 1) return false;
-  if (nw == 0 && se == 1.1) return false;
-  if (ne == 0 && sw == 1.1) return false;
-  return true;
-}
-
 message("You may begin! Select a piece to move.");
-my_turn = true;
+red_turn = true;
