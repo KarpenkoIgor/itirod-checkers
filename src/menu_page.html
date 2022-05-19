@@ -3,7 +3,7 @@
     <head>
         <title>Menu</title>
         <link href="styles.css" rel="stylesheet"/>
-        <link href="menu.css" rel="stylesheet"/>
+        <link href="styles/menu.css" rel="stylesheet"/>
     </head>
     <body>
         <header>
@@ -16,27 +16,19 @@
                 <p class="logo-text">Checkers.com</p>
             </div>
             <div class="account-buttons">
-                <form action="index.html">
-                    <button class="blue-button">Log Out</button>
-                </form>
+                <button id="log-out" class="blue-button">Log Out</button>
             </div>
         </header>
         <main>
             <div class="container">
-                <form>
-                    <h3>#Username</h3>
-                    <form action="game_page.html">                 
-                        <button class="in-form blue-button">Create new board</button>
-                    </form>
-                    <input class="sharp-border" placeholder="url to board">
-                    <form action="game_page.html">
-                        <button class="in-form blue-button">Join to board</button>
-                    </form>  
-                    <form action="help_page.html">
-                        <button class="in-form gray-button">Help Menu</button>
-                    </form>
-                </form>
+                <h3>#Username</h3>              
+                <button id="create-board" class="in-form blue-button">Create new board</button>
+                <input id="url-to-board" class="sharp-border" placeholder="url to board">
+                <button id="join-to-board" class="in-form blue-button">Join to board</button>
+                <button id="help" class="in-form gray-button">Help Menu</button>
             </div>
         </main>
+        <script src="scripts/header.js"></script>
+        <script src="scripts/menu.js"></script>
     </body>
 </html>

@@ -3,7 +3,7 @@
     <head>
         <title>Log In</title>
         <link href="styles.css" rel="stylesheet"/>
-        <link href="login.css" rel="stylesheet"/>
+        <link href="styles/login.css" rel="stylesheet"/>
     </head>
     <body>
         <div class="container">
@@ -16,14 +16,11 @@
             </div>            
             <p class="logo-text">Checkers.com</p>
         </div>
-        <div class="container">
-            <form action="menu_page.html">
-                <input placeholder="Username">
-                <br>
-                <input type="password" placeholder="Password">
-                <br>
-                <button class="blue-button">Log In</button>
-            </form>
+        <div id="login-form" class="container">
+            <input id="username" placeholder="Username">
+            <input id="password" type="password" placeholder="Password">
+            <button id="log-in" class="blue-button">Log In</button>
         </div>
+        <script src="scripts/log_in.js"></script>
     </body>
 </html>

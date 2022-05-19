@@ -64,9 +64,6 @@ Board(1,0,1,0,1,0,1,0,
   -1,0,-1,0,-1,0,-1,0,
   0,-1,0,-1,0,-1,0,-1);
 
-function message(str) {
-  if (!game_is_over) document.disp.message.value = str;
-}
 function moveable_space(i, j) {
   // calculates whether it is a gray (moveable)
   // or black (non-moveable) space
@@ -82,6 +79,7 @@ function coord(x, y) {
 }
 
 document.write(
+  '<div class="board">' +
   "<table border=0 cellspacing=0 cellpadding=0 width=" +
     (square_dim * 8 + 8) +
     "<tr><td><img src='gif/black.gif' width=" +
@@ -121,17 +119,20 @@ document.write(
   "<tr><td><img src='gif/black.gif' width=" +
     (square_dim * 8 + 8) +
     " height=4><br></td></tr></table><br>" +
-    "<form name='disp'><textarea name='message' wrap=virtual rows=2 cols=40></textarea><br><input " +
-    'type=button value="Start the Game Over" onClick="location.href+=\'\'"></form>'
+    "</div>"+
+    "<form class='controllers' name='disp'>" +
+    '<div class="moves-history"><p class="history-title">Moves History</p>' +
+    "<textarea name='message' id='message' wrap=virtual rows=2 cols=40></textarea></div>" +
+    '<div id="copy-url"><input class="url" value="#url-to-board" disabled><button id="copy" class="black-button">Copy</button></div>' +
+    '<div id="send-request"><input placeholder="username"><button id="send" class="blue-button">Send</button></div>' +
+    "</form>"
 );
+
+const textarea = document.getElementById('message');
 
 function clicked(i, j) {
   if (integ((board[i][j]) >= 1 && red_turn)|| (integ(board[i][j]) <= -1 && !red_turn)) toggle(i, j);
   else if (piece_toggled) move(selected, coord(i, j));
-  else
-    message(
-      "First click one of your red pieces, then click where you want to move it"
-    );  
 }
 function toggle(x, y) {
   if (red_turn) {
@@ -197,15 +198,12 @@ function legal_move(from, to) {
   piece = board[from.x][from.y];
   distance = coord(to.x - from.x, to.y - from.y);
   if (distance.x == 0 || distance.y == 0) {
-    message("You may only move diagonally.");
     return false;
   }
   if (abs(distance.x) != abs(distance.y)) {
-    message("Invalid move.");
     return false;
   }
   if (abs(distance.x) > 2) {
-    message("Invalid move.");
     return false;
   }
   if (abs(distance.x) == 1 && double_jump) {
@@ -249,9 +247,6 @@ function move(from, to) {
         legal_move(to, coord(to.x - 2, to.y + 2))
       ) {
         double_jump = true;
-        message(
-          "You may complete the double jump or click on your piece to stay still."
-        );
       }
     }
     if (board[to.x][to.y] == 1 && to.y == 7 && red_turn) king_me(to.x, to.y);
@@ -267,6 +262,11 @@ function move(from, to) {
             ");red_turn = double_jump = false;",
           100
         );
+        textarea.value += 
+          "Red:\n" +
+          "\tFrom: " + from.x + "," + from.y + "\n" +
+          "\tTo: " + to.x + "," + to.y + "\n" 
+        ;
       }
     }
     else {
@@ -279,6 +279,10 @@ function move(from, to) {
             ");red_turn = true;double_jump = false;",
           100
         );
+        textarea.value += 
+          "Black:\n"+
+          "\tFrom: " + from.x + "," + from.y + "\n" +
+          "\tTo: " + to.x + "," + to.y + "\n";
       }
     }
   }
@@ -292,6 +296,10 @@ function king_me(x, y) {
     board[x][y] = -1.1; // king me
     draw(x, y, "gif/me2k.gif");
   }
+  if(red_turn) textarea.value += "\nRed "
+  else textarea.value += "\nBalck "
+  textarea.value += 
+  "checker("+ x +"," + y +")is king now\n";
 }
 
 function swap(from, to) {
@@ -307,6 +315,10 @@ function swap(from, to) {
 function remove(x, y) {
   draw(x, y, "gif/gray.gif");
   board[x][y] = 0;
+  if(red_turn) textarea.value += "\nBlack "
+  else textarea.value += "\nRed "
+  textarea.value += 
+  "checker("+ x +"," + y +") eaten\n";
 }
 function Result(val) {
   this.high = val;
@@ -322,11 +334,14 @@ function game_over() {
       if (integ(board[i][j]) == 1) you = true;
     }
   }
-  if (!comp) message("You beat me!");
-  if (!you) message("Gotcha! Game over.");
+  if (!comp) textarea.value += 
+    "You beat me!";
+  if (!you) textarea.value += 
+    "Gotcha! Game over.";
   game_is_over = !comp || !you;
   return !game_is_over;
 }
 
-message("You may begin! Select a piece to move.");
+textarea.value += 
+  "The game started!\n";
 red_turn = true;

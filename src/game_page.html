@@ -3,7 +3,7 @@
     <head>
         <title>Game</title>
         <link href="styles.css" rel="stylesheet"/>
-        <link href="game.css" rel="stylesheet"/>
+        <link href="styles/game.css" rel="stylesheet"/>
 
     </head>
     <body>
@@ -17,32 +17,13 @@
                 <p class="logo-text">Checkers.com</p>
             </div>
             <div class="account-buttons">
-                <form action="menu_page.html">
-                    <button class="gray-button">Menu</button>
-                </form>
-                <form action="index.html">
-                    <button class="blue-button">Log Out</button>
-                </form>
+                <button id="menu" class="gray-button">Menu</button>
+                <button id="log-out" class="blue-button">Log Out</button>
             </div>
         </header>
         <main>
-            <div class="controllers">
-                <div class="moves-history">
-                    <p class="history-title">Moves History</p>
-                    <div class="history-list">
-                        <p class="message">Test message</p>
-                    </div>
-                </div>
-                <form>
-                    <input class="url" value="#url-to-board" disabled>
-                    <button class="black-button">Copy</button>
-                </form>
-                <form>
-                    <input placeholder="username">
-                    <button class="blue-button">Send</button>
-                </form>
-            </div>
+            <script src="game_logic.js"></script>
         </main>
-        <script src="game_logic.js"></script>
+        <script src="scripts/header.js"></script>
     </body>
 </html>

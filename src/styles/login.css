@@ -24,6 +24,10 @@ button {
     justify-content: center;
 }
 
+#login-form {
+    flex-direction: column;
+}
+
 @media only screen  and (hover: none) {
     input {
         margin-top: 10px;
