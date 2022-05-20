@@ -1,0 +1,29 @@
+.container {
+    float: left;
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+@media only screen and (max-width: 560px){
+
+    .board {
+        display: none;
+    }
+}
+
+@media only screen and (hover: none){
+
+    .board {
+        display: none;
+    }
+
+    .logo-text {
+        font-size: 64px;
+        margin-top: 12px;
+        margin-bottom: 8px;
+    }
+
+    main{
+        margin-top: 300px;
+    }
+}
