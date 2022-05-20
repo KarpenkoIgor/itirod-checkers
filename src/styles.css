@@ -14,8 +14,22 @@ header {
     height: 60px;
 }
 
+#user-email {
+    font-size: 30px;
+    margin-inline: 10px;
+}
+
+#error-field {
+    color:red;
+}
+
+#main-container {
+    background-color: #4e4e4e;
+}
+
 main{
     margin-top: 70px;
+    background-color: #4e4e4e;
 }
 
 button {
@@ -36,6 +50,10 @@ input {
     color: white;
 }
 
+#url-to-board {
+    width: 300px;
+}
+
 .gray-button {
     background-color: #4e4e4e;
 }
@@ -51,17 +69,18 @@ input {
 
 .account-buttons {
     float: right;
-    margin-top: 12px;
     margin-right: 10px;
 }
 
 .account-buttons > form{
     display: inline-block;
+
 }
 
 .logo {
     margin-left: 10px;
     float: left;
+    height: 60px;
 }
 
 .logo-text {

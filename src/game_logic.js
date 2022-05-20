@@ -134,6 +134,7 @@ function clicked(i, j) {
   if (integ((board[i][j]) >= 1 && red_turn)|| (integ(board[i][j]) <= -1 && !red_turn)) toggle(i, j);
   else if (piece_toggled) move(selected, coord(i, j));
 }
+
 function toggle(x, y) {
   if (red_turn) {
     if (piece_toggled)

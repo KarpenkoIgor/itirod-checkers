@@ -1,4 +1,4 @@
-class Accordion {
+export class Accordion {
     constructor(el) {
       // Store the <details> element
       this.el = el;
