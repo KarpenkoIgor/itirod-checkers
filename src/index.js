@@ -31,6 +31,9 @@ import { AuthErrorCodes } from '@firebase/auth';
 
 const setUserData = (newData) => {
     userData = JSON.parse(JSON.stringify(newData));
+    console.log(newData);
+    console.log(JSON.stringify(newData));
+    console.log(JSON.parse(JSON.stringify(newData)));
   };
 
 
