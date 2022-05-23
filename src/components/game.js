@@ -1,3 +1,3 @@
-export const Game = () => {
+export const GamePage = () => {
     return ``;
 }

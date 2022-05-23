@@ -14,6 +14,10 @@ header {
     height: 60px;
 }
 
+.board {
+    margin-right: 100px;
+}
+
 #user-email {
     font-size: 30px;
     margin-inline: 10px;
@@ -24,6 +28,10 @@ header {
 }
 
 #main-container {
+    background-color: #4e4e4e;
+}
+
+#url-to-board {
     background-color: #4e4e4e;
 }
 
