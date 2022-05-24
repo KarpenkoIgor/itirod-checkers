@@ -131,8 +131,7 @@ input {
 @media only screen  and (hover: none){
     header {
         height: 90px;
-    }
-    
+    }   
 
     body {
         font-size: 32px;
@@ -141,6 +140,17 @@ input {
     input {
         font-size: 50px;
         width:  300px;
+    }
+
+    .logo{
+        float: left;
+        width: 500px;
+    }
+    .board{
+        margin-left: 100px;
+    }
+    .logo-text{
+        font-size: 64px;
     }
     
     button {
@@ -152,6 +162,10 @@ input {
         padding: 4px 10px;
     }
     
+    #url-to-board{
+        width: 500px;
+    }
+
     .gray-button {
         background-color: #4e4e4e;
     }
@@ -163,8 +177,6 @@ input {
     .black-button {
         background-color: #1b1b1b;
     }
-    
-
     
     .big-circle {
         display: none;
@@ -225,7 +237,7 @@ input {
         margin-top: 12px;
         margin-right: 10px;
     }
-    
+
     .logo-text {
         display: inline-block;
         font-size: 64px;

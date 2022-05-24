@@ -6,10 +6,6 @@
 
 @media only screen and (hover: none){
 
-    .board {
-        display: none;
-    }
-
     .logo-text {
         font-size: 64px;
         margin-top: 12px;

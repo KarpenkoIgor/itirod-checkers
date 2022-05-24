@@ -8,6 +8,10 @@ import "./gif/me1.gif";
 import "./gif/me2.gif";
 import "./gif/me1k.gif";
 import "./gif/me2k.gif";
+import {
+  setBoardData,
+  monitorBoardState,
+} from "./api/firebase-config";
 
 class Coord {
   constructor(x, y){
@@ -18,6 +22,7 @@ class Coord {
 
 export class Game {
   constructor() {
+    this.boardID;
     this.textarea;
     this.square_dim = 80;
     this.piece_toggled = false;
@@ -79,6 +84,8 @@ export class Game {
         text += "<img src='" ;
         if (this.board[i][j] == 1) text += "gif/you1.gif";
         else if (this.board[i][j] == -1) text += "gif/me1.gif";
+        else if (this.board[i][j] == 1.1) text += "gif/you1k.gif";
+        else if (this.board[i][j] == -1.1) text += "gif/me1k.gif";
         else if (this.moveable_space(i, j)) text += "gif/gray.gif";
         else text += "gif/black.gif";
         text += 
@@ -103,7 +110,7 @@ export class Game {
         "<form class='controllers' name='disp'>" +
         '<div class="moves-history"><p class="history-title">Moves History</p>' +
         "<textarea name='message' id='message' wrap=virtual rows=2 cols=40></textarea></div>" +
-        '<div id="copy-url"><input class="url" value="#url-to-board" disabled><button id="copy" class="black-button">Copy</button></div>' +
+        '<div id="copy-url"><input class="url" id="url-to-board" value="#url-to-board" disabled></div>' +
         "</form>";
     return text;
   }
@@ -238,8 +245,8 @@ export class Game {
           this.textarea.value += 
             "Red:\n" +
             "\tFrom: " + from.x + "," + from.y + "\n" +
-            "\tTo: " + to.x + "," + to.y + "\n" 
-          ;
+            "\tTo: " + to.x + "," + to.y + "\n";
+            setBoardData(this.boardID, this.board, this.textarea.value, this.red_turn);
         }
       }
       else {
@@ -250,6 +257,7 @@ export class Game {
             "Black:\n"+
             "\tFrom: " + from.x + "," + from.y + "\n" +
             "\tTo: " + to.x + "," + to.y + "\n";
+          setBoardData(this.boardID, this.board, this.textarea.value, this.red_turn);
         }
       }
     }

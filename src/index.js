@@ -17,10 +17,13 @@ import {
     signUpWithEmail,
     signOutFromApp,
     monitorAuthState,
+    setBoardData,
+    getBoardData,
+    getBoardData2,
+    monitorBoardState,
   } from "./api/firebase-config";
 
-
-import "./styles/board.css";
+//import "./styles/board.css";
 import "./styles/game.css";
 import "./styles/help.css";
 import "./styles/login.css";
@@ -38,6 +41,16 @@ const setUserData = (newData) => {
     console.log(JSON.parse(JSON.stringify(newData)));
   };
 
+const generateBoardID = () => {
+    let result           = '';
+    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for ( let i = 0; i < 16; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+    charactersLength));
+   }
+   return result;
+}
 
 let userData = {
     id: "",
@@ -129,7 +142,9 @@ const RenderMenu = () => {
     });
     addOnClick("join-to-board", () => {
         gameStarted = true;
-        RenderGame();
+        if(document.getElementById("url-to-board").value){
+            RenderGame(document.getElementById("url-to-board").value);
+        }
     });
     addOnClick("help", () => {
         RenderHelp();
@@ -146,24 +161,49 @@ const RenderMenu = () => {
       });
 }
 
-const RenderGame= () => {
-    headerContainer.innerHTML = GameHeader();
+export const ChangeBoard = (data) => {
+    game.board = data.position;
+    game.textarea.value = data.history;
+    game.red_turn = data.lastMove;
+    mainContainer.innerHTML = game.drawBoard();  
+    document.getElementById("message").value = game.textarea.value;
+    game.textarea = document.getElementById("message")
+}
+
+const RenderGame = async (url) => {
     game = new Game();
+    headerContainer.innerHTML = GameHeader();
     mainContainer.innerHTML = game.drawBoard();
     game.textarea = document.getElementById("message");
+
+    if(url){
+        game.boardID = url;
+        //await getBoardData(game.boardID, game); 
+        getBoardData2(url, game, () => {});
+        //mainContainer.innerHTML = game.drawBoard();  
+        //document.getElementById("message").value = game.textarea.value;
+        //game.textarea = document.getElementById("message")
+    }
+    else{
+        game.boardID = generateBoardID();
+        setBoardData(game.boardID, game.board, game.textarea.value, game.red_turn);
+    }
+
+    document.getElementById("url-to-board").value = game.boardID;
 
     for (var j = 0; j < 8; j++) {
         for (var i = 0; i < 8; i++){
             addMoveAction(i, j, () => game.clicked);
         }
     }   
-
     addOnClick("menu", () => {
         gameStarted = false;
+        game = null;
         RenderMenu();
     });
     addOnClick("log-out", () => {
         gameStarted = false;
+        game = null;
         setUserData({
           id: "",
           name: "",
@@ -172,12 +212,7 @@ const RenderGame= () => {
         });
         signOutFromApp();
         RenderWelcome();
-    });
-    // addOnClick("copy", () => {
-    //     let copyText = document.getElementById("url-to-board");
-    //     copyText.select();
-    //     document.execCommand("copy");
-    // })
+    });    
 }
 
 const RenderHelp = () => {
@@ -203,3 +238,5 @@ const RenderHelp = () => {
 
 RenderWelcome();
 monitorAuthState(setUserData, RenderMenu);
+//monitorBoardState(game, ChangeBoard);
+
