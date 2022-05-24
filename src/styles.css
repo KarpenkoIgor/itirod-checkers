@@ -62,6 +62,10 @@ input {
     width: 300px;
 }
 
+#url-to-board-input{
+    width: 300px;
+}
+
 .gray-button {
     background-color: #4e4e4e;
 }
@@ -164,6 +168,11 @@ input {
     
     #url-to-board{
         width: 500px;
+
+    }
+    #url-to-board-input{
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     .gray-button {

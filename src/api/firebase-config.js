@@ -45,7 +45,7 @@ export function setBoardData(boardId, position, history, lastMove) {
   });
 }
 
-export async function getBoardData(boardId, game) {
+export async function getBoardData2(boardId, game) {
   const dbRef = ref(getDatabase());
   await get(child(dbRef, 'boards/'+ boardId)).then((snapshot) => {
     if (snapshot.exists()) {
@@ -60,7 +60,7 @@ export async function getBoardData(boardId, game) {
   });
 }
 
-export async function getBoardData2(boardID, game) {
+export async function getBoardData(boardID) {
   const db = getDatabase();
   const Ref = ref(db, 'boards/' + boardID);
   onValue(Ref, (snapshot) => {

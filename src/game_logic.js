@@ -109,13 +109,12 @@ export class Game {
         "</div>"+
         "<form class='controllers' name='disp'>" +
         '<div class="moves-history"><p class="history-title">Moves History</p>' +
-        "<textarea name='message' id='message' wrap=virtual rows=2 cols=40></textarea></div>" +
+        "<textarea name='message' id='message' wrap=virtual readonly rows=2 cols=40></textarea></div>" +
         '<div id="copy-url"><input class="url" id="url-to-board" value="#url-to-board" disabled></div>' +
         "</form>";
     return text;
   }
   clicked(i, j) {
-    console.log(i + j);
     if (this.integ((this.board[i][j]) >= 1 && this.red_turn)|| (this.integ(this.board[i][j]) <= -1 && !this.red_turn)) {
       this.toggle(i, j);
     }

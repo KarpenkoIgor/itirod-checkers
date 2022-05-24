@@ -19,7 +19,6 @@ import {
     monitorAuthState,
     setBoardData,
     getBoardData,
-    getBoardData2,
     monitorBoardState,
   } from "./api/firebase-config";
 
@@ -142,8 +141,8 @@ const RenderMenu = () => {
     });
     addOnClick("join-to-board", () => {
         gameStarted = true;
-        if(document.getElementById("url-to-board").value){
-            RenderGame(document.getElementById("url-to-board").value);
+        if(document.getElementById("url-to-board-input").value){
+            RenderGame(document.getElementById("url-to-board-input").value);
         }
     });
     addOnClick("help", () => {
@@ -168,6 +167,15 @@ export const ChangeBoard = (data) => {
     mainContainer.innerHTML = game.drawBoard();  
     document.getElementById("message").value = game.textarea.value;
     game.textarea = document.getElementById("message")
+    document.getElementById("url-to-board").value = game.boardID;
+
+    for (var j = 0; j < 8; j++) {
+        for (var i = 0; i < 8; i++){
+            addMoveAction(i, j, () => game.clicked);
+        }
+    } 
+    game.textarea.focus();
+    game.textarea.setSelectionRange(element.value.length,element.value.length);  
 }
 
 const RenderGame = async (url) => {
@@ -178,15 +186,12 @@ const RenderGame = async (url) => {
 
     if(url){
         game.boardID = url;
-        //await getBoardData(game.boardID, game); 
-        getBoardData2(url, game, () => {});
-        //mainContainer.innerHTML = game.drawBoard();  
-        //document.getElementById("message").value = game.textarea.value;
-        //game.textarea = document.getElementById("message")
+        getBoardData(url);
     }
     else{
         game.boardID = generateBoardID();
         setBoardData(game.boardID, game.board, game.textarea.value, game.red_turn);
+        getBoardData(game.boardID);
     }
 
     document.getElementById("url-to-board").value = game.boardID;
